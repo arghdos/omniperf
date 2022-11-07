@@ -17,6 +17,8 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    container:
+       image: rocm/dev-ubuntu-22.04
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -28,17 +30,18 @@ jobs:
       # Cancel any previous runs
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
-
       - name: Install Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-      - name: Install Rocm
-        run: |
-          sudo ./cmake/rocm_install.sh
-          sudo apt-get update
-          sudo apt-get dist-upgrade -y
-          sudo apt-get autoclean
+      - name: List ROCm
+        run ls /opt/rocm
+##       - name: Install Rocm
+##         run: |
+##           sudo ./cmake/rocm_install.sh
+##           sudo apt-get update
+##           sudo apt-get dist-upgrade -y
+##           sudo apt-get autoclean
       - name: Install python prereqs
         run: |
           python3 -m pip install -r requirements.txt
