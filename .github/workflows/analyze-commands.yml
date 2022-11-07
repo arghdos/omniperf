@@ -43,12 +43,11 @@ jobs:
         run: |
           python3 -m pip install -r requirements.txt
           python3 -m pip install pyinstaller pytest pytest-cov mock
-          
       - name: Configure and install
         run: |
-	  mkdir build
-	  cd build
-	  cmake -DCMAKE_INSTALL_PREFIX=/opt/omniperf ..
+          mkdir build
+          cd build
+          cmake -DCMAKE_INSTALL_PREFIX=/opt/omniperf ..
           make install
       - name: run ctest
         run: |
