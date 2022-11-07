@@ -22,18 +22,21 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          token: ${{ secrets.GH_PAT }}
       # Cancel any previous runs
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
+      - name: Install OS deps
+        run: |
+	  sudo apt-get install git
       - name: Install Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
+      - name: Checkout
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.GH_PAT }}
       - name: List ROCm
         run: ls /opt/rocm
 ##       - name: Install Rocm
@@ -52,7 +55,7 @@ jobs:
           cd build
           cmake -DCMAKE_INSTALL_PREFIX=/opt/omniperf ..
           make install
-      - name: run ctest
+      - name: Run ctest
         run: |
           cd build
           ctest --verbose -R test_analyze_commands
