@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: '3.8'
       - name: List ROCm
-        run ls /opt/rocm
+        run: ls /opt/rocm
 ##       - name: Install Rocm
 ##         run: |
 ##           sudo ./cmake/rocm_install.sh
