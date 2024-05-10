@@ -484,16 +484,24 @@ def perfmon_emit(pmc_list, perfmon_config, workload_dir=None):
         for key in pmc_list:
             if key not in ["TCC", "TCC2"]:
                 N = perfmon_config[key]
-                ip_counters = pmc_list[key][iter * N : iter * N + N]
+                # now, that we're finally emitting the counters, we can
+                # cull duplicates
+                ip_counters = OrderedDict()
+                for counter in pmc_list[key][iter * N : iter * N + N]:
+                    ip_counters[counter] = ""
                 if ip_counters:
-                    line = line + " " + " ".join(ip_counters)
+                    line = line + " " + " ".join(ip_counters.keys())
 
         # Add TCC counters
         N = perfmon_config["TCC"]
-        tcc_counters = pmc_list["TCC"][iter * N : iter * N + N]
+        # now, that we're finally emitting the counters, we can
+        # cull duplicates
+        tcc_counters = OrderedDict()
+        for counter in pmc_list["TCC"][iter * N : iter * N + N]:
+            tcc_counters[counter] = ""
 
         # TCC aggregated counters
-        line = line + " " + " ".join(tcc_counters)
+        line = line + " " + " ".join(tcc_counters.keys())
         if workload_dir:
             fd.write(line + "\n")
         else:
@@ -512,7 +520,12 @@ def perfmon_emit(pmc_list, perfmon_config, workload_dir=None):
         # TCC per-channel counters
         tcc_counters = []
         for ch in range(perfmon_config["TCC_channels"]):
-            tcc_counters += pmc_list["TCC2"][str(ch)][tcc2_index * N : tcc2_index * N + N]
+            # now, that we're finally emitting the counters, we can
+            # cull duplicates
+            counterlist = OrderedDict()
+            for counter in pmc_list["TCC2"][str(ch)][tcc2_index * N : tcc2_index * N + N]:
+                counterlist[counter] = ''
+            tcc_counters += list(counterlist.keys())
 
         tcc2_index += 1
 

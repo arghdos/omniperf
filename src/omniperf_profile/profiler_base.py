@@ -109,7 +109,7 @@ class OmniProfiler_Base:
             # we sort so that we have a consistent ordering of files between runs
             # regardless of the file-system, etc.
             files = glob.glob(self.__args.path + "/" + "pmc_perf_*.csv")
-            file.sort()
+            files.sort()
         elif type(self.__args.path) == list:
             files = self.__args.path
         else:
